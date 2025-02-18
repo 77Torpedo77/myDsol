@@ -62,7 +62,8 @@
         <param name="reverse" type="bool" value="$(arg reverse)"/>
     </node>
     <node pkg="dsol" type="sv_dsol_node_processor" name="dsol_processor" output="screen">
-        <rosparam command="load" file="$(find dsol)/config/dsol.yaml"/>
-        <rosparam command="load" file="$(find dsol)/config/dsol_$(arg data).yaml"/>
     </node>
+
+    <node pkg="rviz" type="rviz" name="rviz" args="-d /home/ubuntu/dso_ws/src/dsol-main/launch/dsol.rviz" required="true" />
+
 </launch>
