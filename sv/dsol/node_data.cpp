@@ -231,7 +231,8 @@ void NodeData::Run() {
     // Odom
     const auto status = odom_.Estimate(image_l, image_r, dT_pred, depth);  // 估计姿态
     ROS_INFO_STREAM(status.Repr());  // 输出估计状态
-
+    
+    //pyl:此处运动模型只作为“初始运动模型”使用，提供初值，接入神经网络后理论可以去掉。
     // Motion model correct if tracking is ok and not first frame
     if (status.track.ok && ind != start_ind) {
       motion_.Correct(status.Twc(), dt);  // 校正运动模型

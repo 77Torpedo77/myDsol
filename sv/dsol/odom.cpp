@@ -192,7 +192,7 @@ TrackStatus DirectOdometry::Track(const cv::Mat& image_l,
   const FrameState init_state = frame.state();
 
   // Track frame if possible, if its first frame then result is also ok
-  status.ok = true;
+  status.ok = true;//pyl 这是false才符合逻辑，因为TrackFrame()函数总是会返回true。
   if (!window.empty()) {
     status.ok = TrackFrame();
   }
