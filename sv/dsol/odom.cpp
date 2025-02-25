@@ -6,6 +6,7 @@
 #include "sv/util/logging.h"
 #include "sv/util/ocv.h"
 #include "sv/util/summary.h"
+#include "geometry_msgs/PoseStamped.h"//pyl TODO
 
 namespace sv::dsol {
 
@@ -154,6 +155,29 @@ OdomStatus DirectOdometry::Estimate(const cv::Mat& image_l,
   if (cfg_.vis > 0) DrawFrame(depth);
 
   if (!status.track.ok) Reinitialize();
+
+  //pyl add pyl TODO
+  if (status.track.add_kf) {
+    // Assuming you have a ROS publisher named pose_pub_ already set up
+    geometry_msgs::PoseStamped pose_msg;
+    pose_msg.header.stamp = ros::Time::now();
+    pose_msg.header.frame_id = "odom";  // or any appropriate frame
+
+    // Convert Sophus::SE3d to geometry_msgs::Pose
+    const auto& translation = status.Twc.translation();
+    const auto& rotation = status.Twc.unit_quaternion();
+
+    pose_msg.pose.position.x = translation.x();
+    pose_msg.pose.position.y = translation.y();
+    pose_msg.pose.position.z = translation.z();
+
+    pose_msg.pose.orientation.x = rotation.x();
+    pose_msg.pose.orientation.y = rotation.y();
+    pose_msg.pose.orientation.z = rotation.z();
+    pose_msg.pose.orientation.w = rotation.w();
+
+    pose_pub_.publish(pose_msg);
+  }
 
   status.map = Map(status.track.add_kf, depth);
   if (cfg_.vis > 1 && status.track.add_kf) DrawKeyframe();
