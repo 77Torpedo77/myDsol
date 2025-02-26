@@ -6,8 +6,8 @@
 #include "sv/util/logging.h"
 #include "sv/util/ocv.h"
 #include "sv/util/summary.h"
-#include "geometry_msgs/PoseStamped.h"//pyl TODO
-
+#include "sv/ros1/msg_conv.h"
+//#include "mylib.h"
 namespace sv::dsol {
 
 namespace {
@@ -164,8 +164,8 @@ OdomStatus DirectOdometry::Estimate(const cv::Mat& image_l,
     pose_msg.header.frame_id = "odom";  // or any appropriate frame
 
     // Convert Sophus::SE3d to geometry_msgs::Pose
-    const auto& translation = status.Twc.translation();
-    const auto& rotation = status.Twc.unit_quaternion();
+    const auto& translation = status.Twc().translation();
+     const auto& rotation = status.Twc().unit_quaternion();
 
     pose_msg.pose.position.x = translation.x();
     pose_msg.pose.position.y = translation.y();
@@ -176,7 +176,7 @@ OdomStatus DirectOdometry::Estimate(const cv::Mat& image_l,
     pose_msg.pose.orientation.z = rotation.z();
     pose_msg.pose.orientation.w = rotation.w();
 
-    pose_pub_.publish(pose_msg);
+    pose_pub_.publish(pose_msg);//pyl TODO
   }
 
   status.map = Map(status.track.add_kf, depth);

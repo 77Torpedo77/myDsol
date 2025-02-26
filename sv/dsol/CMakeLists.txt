@@ -178,6 +178,7 @@ cc_library(
        sv_dsol_viz
        sv_util_summary
        sv_util_ocv
+       sv_ros1_msg_conv
       )
 
        
@@ -231,4 +232,10 @@ if(BUILD_ROS)
     NAME dsol_node_processor
     SRCS "node_processor.cpp"
     DEPS sv_dsol_extra sv_util_dataset sv_dsol_node_util)
+
+    # cc_binary(
+    #   NAME dsol_node_processor2
+    #   SRCS "mylib.h"
+    #   DEPS sv_dsol_extra sv_util_dataset sv_dsol_node_util)
+
 endif()
